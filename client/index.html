@@ -4,45 +4,102 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NoteMate AI</title>
-  <script defer src="script.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-indigo-100 via-white to-blue-100 min-h-screen flex items-center justify-center font-sans">
+<body class="bg-gradient-to-br from-pink-300 via-yellow-100 to-yellow-200 min-h-screen flex items-center justify-center">
 
-  <div class="bg-white shadow-xl rounded-3xl p-10 max-w-3xl w-full text-center border border-gray-200">
-    <h1 class="text-4xl font-extrabold text-gray-800 mb-1">NoteMate AI</h1>
-    <p class="text-gray-500 text-sm mb-6 tracking-wide">Smart meeting summaries in seconds 💡</p>
+  <div class="bg-white/60 backdrop-blur-xl shadow-2xl rounded-3xl p-10 max-w-3xl w-full text-center border border-gray-200">
+    <h1 class="text-4xl font-extrabold text-gray-800 mb-2">NoteMate AI</h1>
+    <p class="text-gray-500 text-sm mb-6">Smart meeting summaries in seconds 💡</p>
 
     <!-- Platform logos -->
-    <div class="flex justify-center gap-6 mb-8">
-      <a href="https://meet.google.com" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Google_Meet_logo_%282020%29.svg/1024px-Google_Meet_logo_%282020%29.svg.png" alt="Google Meet" class="h-10 hover:scale-110 transition-transform" />
-      </a>
-      <a href="https://zoom.us/join" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Zoom_Communications_Logo.svg/1024px-Zoom_Communications_Logo.svg.png" alt="Zoom" class="h-10 hover:scale-110 transition-transform" />
-      </a>
-      <a href="https://teams.microsoft.com" target="_blank">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="Teams" class="h-10 hover:scale-110 transition-transform" />
-      </a>
-    </div>
+    <div class="flex justify-center gap-8 items-center mb-8">
+  <!-- Google Meet -->
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Google_Meet_logo_%282020%29.svg/512px-Google_Meet_logo_%282020%29.svg.png" alt="Google Meet" class="h-10 hover:scale-110 transition-transform" />
+
+  <!-- Zoom -->
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Zoom_Communications_Logo.svg/512px-Zoom_Communications_Logo.svg.png" alt="Zoom" class="h-10 hover:scale-110 transition-transform" />
+
+  <!-- Microsoft Teams -->
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg/512px-Microsoft_Office_Teams_%282018%E2%80%93present%29.svg.png" alt="Teams" class="h-10 hover:scale-110 transition-transform" />
+</div>
+
 
     <!-- Upload -->
-    <label class="block mb-2 text-gray-700 font-medium text-sm">Upload Meeting Audio (.mp3/.wav)</label>
-    <input type="file" id="audioFile" class="border rounded-lg px-3 py-1 w-full mb-4 text-sm text-gray-700" />
-    <button onclick="uploadAudio()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">Upload & Summarize</button>
+    <label for="audioFile" class="block mb-2 text-gray-700 font-medium text-sm">Upload Meeting Audio (.mp3/.wav)</label>
+    <input type="file" id="audioFile" accept=".mp3, .wav" class="bg-white shadow-inner border border-gray-300 rounded-lg px-3 py-2 w-full mb-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-200" />
+    <p id="fileName" class="text-sm text-gray-600 italic mb-4"></p>
+    <button onclick="uploadAudio()" class="bg-pink-500 hover:bg-pink-600 hover:shadow-lg text-white font-semibold px-4 py-2 rounded-lg text-sm transition-shadow" role="button" aria-label="Upload and summarize audio">
+      Upload & Summarize
+    </button>
 
-    <div id="results" class="mt-6 text-left text-sm text-gray-700 whitespace-pre-wrap"></div>
+    <!-- Loader and Result -->
+    <div id="loader" class="hidden mt-4 text-pink-600 font-semibold text-sm">⏳ Summarizing...</div>
+    <div id="results" class="mt-4 text-left text-sm text-gray-700 whitespace-pre-wrap"></div>
 
     <!-- Calendar -->
     <div class="mt-10">
       <h2 class="text-xl font-semibold mb-3 text-gray-800">📅 Schedule a Task / Meeting</h2>
-      <div class="flex justify-center gap-2">
-        <input type="datetime-local" id="calendarInput" class="border p-2 rounded-lg text-sm text-gray-700" />
-        <button onclick="addToCalendar()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition">Add</button>
+      <div class="flex justify-center gap-3">
+        <input type="datetime-local" id="calendarInput" class="bg-white shadow-inner border border-gray-300 rounded-lg p-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-200" />
+        <button onclick="addToCalendar()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm transition" role="button" aria-label="Add to calendar">Add</button>
       </div>
       <ul id="calendarList" class="mt-4 list-disc list-inside text-left text-sm text-gray-800"></ul>
     </div>
   </div>
+
+  <script>
+    function uploadAudio() {
+      const file = document.getElementById("audioFile").files[0];
+      const fileNameElem = document.getElementById("fileName");
+      const loader = document.getElementById("loader");
+      const results = document.getElementById("results");
+
+      if (file) {
+        fileNameElem.innerText = "Selected: " + file.name;
+        results.innerText = "";
+        loader.classList.remove("hidden");
+
+        setTimeout(() => {
+          loader.classList.add("hidden");
+          results.innerText = "📝 Summary:\nThis is a placeholder summary of your meeting audio.";
+        }, 2000);
+      } else {
+        alert("Please select an audio file first.");
+        fileNameElem.innerText = "";
+        results.innerText = "";
+        loader.classList.add("hidden");
+      }
+    }
+
+    function addToCalendar() {
+      const input = document.getElementById("calendarInput");
+      const list = document.getElementById("calendarList");
+      const value = input.value;
+
+      if (value) {
+        const formatted = new Date(value).toLocaleString();
+        const exists = [...list.children].some(li => li.textContent === formatted);
+
+        if (!exists) {
+          const item = document.createElement("li");
+          item.textContent = formatted;
+          list.appendChild(item);
+          input.value = "";
+        } else {
+          alert("This event is already scheduled.");
+        }
+      } else {
+        alert("Please select a date and time.");
+      }
+    }
+  </script>
 
 </body>
 </html>
