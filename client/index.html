@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoteMate AI</title>
+  <script defer src="script.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-indigo-100 via-white to-blue-100 min-h-screen flex items-center justify-center font-sans">
+
+  <div class="bg-white shadow-xl rounded-3xl p-10 max-w-3xl w-full text-center border border-gray-200">
+    <h1 class="text-4xl font-extrabold text-gray-800 mb-1">NoteMate AI</h1>
+    <p class="text-gray-500 text-sm mb-6 tracking-wide">Smart meeting summaries in seconds 💡</p>
+
+    <!-- Platform logos -->
+    <div class="flex justify-center gap-6 mb-8">
+      <a href="https://meet.google.com" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Google_Meet_logo_%282020%29.svg/1024px-Google_Meet_logo_%282020%29.svg.png" alt="Google Meet" class="h-10 hover:scale-110 transition-transform" />
+      </a>
+      <a href="https://zoom.us/join" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Zoom_Communications_Logo.svg/1024px-Zoom_Communications_Logo.svg.png" alt="Zoom" class="h-10 hover:scale-110 transition-transform" />
+      </a>
+      <a href="https://teams.microsoft.com" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="Teams" class="h-10 hover:scale-110 transition-transform" />
+      </a>
+    </div>
+
+    <!-- Upload -->
+    <label class="block mb-2 text-gray-700 font-medium text-sm">Upload Meeting Audio (.mp3/.wav)</label>
+    <input type="file" id="audioFile" class="border rounded-lg px-3 py-1 w-full mb-4 text-sm text-gray-700" />
+    <button onclick="uploadAudio()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-lg text-sm transition">Upload & Summarize</button>
+
+    <div id="results" class="mt-6 text-left text-sm text-gray-700 whitespace-pre-wrap"></div>
+
+    <!-- Calendar -->
+    <div class="mt-10">
+      <h2 class="text-xl font-semibold mb-3 text-gray-800">📅 Schedule a Task / Meeting</h2>
+      <div class="flex justify-center gap-2">
+        <input type="datetime-local" id="calendarInput" class="border p-2 rounded-lg text-sm text-gray-700" />
+        <button onclick="addToCalendar()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition">Add</button>
+      </div>
+      <ul id="calendarList" class="mt-4 list-disc list-inside text-left text-sm text-gray-800"></ul>
+    </div>
+  </div>
+
+</body>
+</html>
