@@ -4,6 +4,9 @@ from transcriber import transcribe_audio
 from summarizer import summarize_text
 
 app = Flask(__name__)
+@app.route('/')
+def home():
+    return "✅ NoteMate AI backend is running!"
 UPLOAD_FOLDER = "../uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
